@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+    cout << "Hello World!\n";
+    //initialises the storage vectors for the words and their tallies
+    vector<string> listOfWords{};
+    vector <int>  WordTally{};
+    int punctutally=0;
+    //initialises the variables that will be used to work with the text from file
+    string maintext;
+    string subtext;
+    vector<string> punctlist{ " ",".",",","","?","!","-","_",};
+    //OPENS FILE
+    fstream reader_("input.txt");
+    if (reader_.is_open())
+    {
+        cout << "test  if";
+        while (getline(reader_, subtext)) {
+            cout << "test loop";
+            maintext = maintext + subtext;
+
+        }
+    }
+    else {
+        cout << "unable to read\n";
+    }
+    cout << maintext;
+    int mainlength = maintext.length();
+    //initialised string to store words
+    string wordstore;
+
+    for (int A = 1; A = mainlength; A++)
+    {
+        string addword = to_string(maintext[A]);
+        //cout << addword;
+        //checks for if the current character in the input file is not a letter
+        bool ispunct=(find(punctlist.begin(),punctlist.end(),addword) != punctlist.end());
+
+        if (ispunct)
+        {
+            //if the selected character is in the punctuation list, the program checks if it's
+            //in the word stored in wordstore is in thelist already. if so, it uses the index 
+            // it's found at to incrament it's tally. if not, it adds the new word to the end 
+            //and adds a tally of 1 to the tally list.
+            int CID = 0;
+            bool ischecked = false;
+            bool notpresent = false;
+            while (!ischecked or !notpresent)
+            {
+                //cout << "test enter try";
+                try
+                {
+                    string currentword = listOfWords[CID];
+                    if (currentword == wordstore)
+                    {
+                        WordTally[CID] = +1;
+                        wordstore = "";
+                        ischecked = true;
+                    }
+                }
+                catch (out_of_range)
+                {
+                    listOfWords.push_back(wordstore);
+                    WordTally.push_back(1);
+                    wordstore = "";
+                    notpresent = true;
+                }
+
+            }
+
+        }
+        else
+        {
+            //if the selected character is not considered punctuation, it's added to wordstore.
+            wordstore += addword;
+            //cout << "test adding word";
+           // cout << wordstore;
+        }
+    }
+    if (listOfWords.size()<1)
+    {
+        //returns error if no words are present.
+        cout <<"error: text file empty or program error";
+    }
+    else
+    {
+        //outputs all stored words and respective tallies.
+        cout << "word tallies:\n";
+        for (int C = 1; C = listOfWords.size(); C++)
+        {
+            cout << listOfWords[C-1]," - ",to_string (WordTally[C-1]),"\n";
+        }
+    }
+    return 0;
+}
